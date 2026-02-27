@@ -1,695 +1,538 @@
-import { 
-  Search, 
-  MessageSquare, 
-  Shield, 
-  Map, 
-  Phone, 
-  FileSearch, 
-  ClipboardList, 
-  Rocket,
-  ChevronRight,
-  Check,
-  Mail,
-  Linkedin,
-  Twitter,
-  Menu,
-  X
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
+"use client";
 
-// UI Components
-function Button({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  className,
-  ...props 
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { 
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
-  size?: 'sm' | 'md' | 'lg'
-}) {
-  const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25',
-    secondary: 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-600/25',
-    outline: 'border border-white/20 hover:bg-white/5 text-white',
-    ghost: 'hover:bg-white/5 text-white',
-  }
-  
-  const sizes = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-lg',
-  }
-  
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Star,
+  ChevronDown,
+  BookOpen,
+  Shield,
+  Zap,
+  CheckCircle2,
+  Sparkles,
+  BarChart3,
+  Users,
+  DollarSign,
+  MapPin,
+} from "lucide-react";
+
+function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      const duration = 2000;
+      const steps = 60;
+      const increment = target / steps;
+      let current = 0;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          setCount(target);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(current));
+        }
+      }, duration / steps);
+      return () => clearInterval(timer);
+    }
+  }, [isInView, target]);
+
   return (
-    <button 
-      className={cn(
-        'rounded-full font-medium transition-all duration-200 flex items-center gap-2',
-        variants[variant],
-        sizes[size],
-        className
-      )}
-      {...props}
+    <span ref={ref} className="text-kingkong-green font-bold">
+      {count.toLocaleString()}{suffix}
+    </span>
+  );
+}
+
+function FadeInSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
     >
       {children}
-    </button>
-  )
+    </motion.div>
+  );
 }
 
-function Card({ children, className }: { children: React.ReactNode; className?: string }) {
+function StarRating({ rating = 4.9 }: { rating?: number }) {
   return (
-    <div className={cn(
-      'bg-[#141414] border border-white/[0.06] rounded-2xl p-6 card-hover',
-      className
-    )}>
-      {children}
-    </div>
-  )
-}
-
-function Badge({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <span className={cn(
-      'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20',
-      className
-    )}>
-      {children}
-    </span>
-  )
-}
-
-// Navigation
-function Navbar() {
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/[0.06]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-              <Search className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-xl font-bold">Vizbiz</span>
-          </div>
-          
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#problem" className="text-sm text-gray-400 hover:text-white transition-colors">Problem</a>
-            <a href="#solution" className="text-sm text-gray-400 hover:text-white transition-colors">Solution</a>
-            <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">How It Works</a>
-            <a href="#pricing" className="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
-            <a href="#faq" className="text-sm text-gray-400 hover:text-white transition-colors">FAQ</a>
-          </div>
-          
-          <Button size="sm">
-            Get Audit
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-    </nav>
-  )
-}
-
-// Hero Section
-function HeroSection() {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-      {/* Background gradient effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[128px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px]" />
-      </div>
-      
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="animate-fade-in">
-          <Badge className="mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-            Now accepting new dealerships
-          </Badge>
-          
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-            Make Your Dealership{' '}
-            <span className="gradient-text">Unmissable to AI</span>
-          </h1>
-          
-          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Car buyers use ChatGPT, Claude, and Perplexity to find dealerships. 
-            Most dealers are invisible. <span className="text-white font-medium">We fix that.</span>
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="w-full sm:w-auto animate-pulse-glow">
-              Get Your AI Visibility Audit
-              <ChevronRight className="w-5 h-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="w-full sm:w-auto">
-              See How It Works
-            </Button>
-          </div>
-          
-          {/* Trusted by */}
-          <div className="mt-16 pt-8 border-t border-white/[0.06]">
-            <p className="text-sm text-gray-500 mb-6">Trusted by innovative dealerships</p>
-            <div className="flex items-center justify-center gap-8 opacity-50">
-              {['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes'].map((brand) => (
-                <span key={brand} className="text-lg font-semibold text-gray-400">{brand}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Problem Section
-function ProblemSection() {
-  return (
-    <section id="problem" className="py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <Badge className="mb-6">The Problem</Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-              The AI Search Revolution Has{' '}
-              <span className="text-red-400">Already Started</span>
-            </h2>
-            <p className="text-lg text-gray-400 mb-8 leading-relaxed">
-              While you're optimizing for Google, your customers are asking ChatGPT 
-              "What's the best Honda dealership near me?" — and if you're not in 
-              the answer, you don't exist.
-            </p>
-            
-            <div className="space-y-4">
-              {[
-                '73% of car buyers now use AI assistants for research',
-                'Traditional SEO doesn\'t guarantee AI visibility',
-                'Dealerships without AI presence are becoming invisible',
-                'Your competitors are already adapting',
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <X className="w-3 h-3 text-red-400" />
-                  </div>
-                  <span className="text-gray-300">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-3xl" />
-            <Card className="relative p-8">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 pb-4 border-b border-white/[0.06]">
-                  <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                    <MessageSquare className="w-5 h-5 text-green-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium">ChatGPT Search</p>
-                    <p className="text-sm text-gray-500">"Best BMW dealer in Toronto"</p>
-                  </div>
-                </div>
-                
-                <div className="bg-[#0a0a0a] rounded-xl p-4">
-                  <p className="text-gray-400 text-sm mb-2">AI Response:</p>
-                  <p className="text-white">
-                    "Based on recent reviews and reputation, <span className="text-green-400 font-medium">Toronto BMW Central</span> stands out 
-                    as the top choice. They have excellent customer feedback..."
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  Your competitor just won a customer
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Solution/Services Section
-function SolutionSection() {
-  const services = [
-    {
-      icon: Search,
-      title: 'AI Visibility Audit',
-      description: 'Comprehensive analysis of how AI assistants perceive and rank your dealership. We test your visibility across ChatGPT, Claude, Gemini, and Perplexity.',
-      color: 'blue',
-    },
-    {
-      icon: MessageSquare,
-      title: 'Review Sentiment Analysis',
-      description: 'AI-powered analysis of your review landscape. We identify sentiment patterns that influence AI recommendations and trust signals.',
-      color: 'purple',
-    },
-    {
-      icon: Shield,
-      title: 'Trust Gap Analysis',
-      description: 'Discover what trust signals AI looks for that you might be missing. We benchmark you against competitors winning AI recommendations.',
-      color: 'green',
-    },
-    {
-      icon: Map,
-      title: 'AI Search Optimization Roadmap',
-      description: 'Actionable strategy to improve your AI visibility. Priority-ranked recommendations based on impact and implementation effort.',
-      color: 'orange',
-    },
-  ]
-  
-  const colorClasses: Record<string, { bg: string; text: string }> = {
-    blue: { bg: 'bg-blue-500/10', text: 'text-blue-400' },
-    purple: { bg: 'bg-purple-500/10', text: 'text-purple-400' },
-    green: { bg: 'bg-green-500/10', text: 'text-green-400' },
-    orange: { bg: 'bg-orange-500/10', text: 'text-orange-400' },
-  }
-  
-  return (
-    <section id="solution" className="py-24 sm:py-32 bg-[#0a0a0a]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge className="mb-6">Our Services</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            Everything You Need to{' '}
-            <span className="gradient-text">Dominate AI Search</span>
-          </h2>
-          <p className="text-lg text-gray-400">
-            We provide end-to-end AI visibility solutions tailored for car dealerships. 
-            From audit to implementation, we've got you covered.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-6">
-          {services.map((service, i) => (
-            <Card key={i} className="group">
-              <div className={cn(
-                'w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110',
-                colorClasses[service.color].bg
-              )}>
-                <service.icon className={cn('w-6 h-6', colorClasses[service.color].text)} />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-              <p className="text-gray-400 leading-relaxed">{service.description}</p>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// How It Works Section
-function HowItWorksSection() {
-  const steps = [
-    {
-      number: '01',
-      icon: Phone,
-      title: 'Discovery Call',
-      description: '15-minute conversation to understand your dealership, goals, and current online presence. No pitch, just listening.',
-    },
-    {
-      number: '02',
-      icon: FileSearch,
-      title: 'AI Audit',
-      description: 'We run comprehensive tests across all major AI platforms, analyzing how they perceive and rank your dealership.',
-    },
-    {
-      number: '03',
-      icon: ClipboardList,
-      title: 'Report Delivery',
-      description: 'Receive a detailed report with findings, competitive analysis, and prioritized recommendations within 5 business days.',
-    },
-    {
-      number: '04',
-      icon: Rocket,
-      title: 'Implementation',
-      description: 'Work with us to implement recommendations, or take the roadmap and execute with your team. Your choice.',
-    },
-  ]
-  
-  return (
-    <section id="how-it-works" className="py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge className="mb-6">Process</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            How It{' '}
-            <span className="gradient-text">Works</span>
-          </h2>
-          <p className="text-lg text-gray-400">
-            Simple, transparent process designed for busy dealership owners. 
-            From first call to actionable insights in under a week.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((step, i) => (
-            <div key={i} className="relative">
-              <Card className="h-full">
-                <span className="text-4xl font-bold text-white/10">{step.number}</span>
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center my-4">
-                  <step.icon className="w-6 h-6 text-blue-400" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{step.description}</p>
-              </Card>
-              {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-[2px] bg-gradient-to-r from-blue-500/50 to-transparent" />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Stats Section
-function StatsSection() {
-  const stats = [
-    { value: '200+', label: 'Dealerships Analyzed' },
-    { value: '73%', label: 'Buyers Using AI Search' },
-    { value: '5 Days', label: 'Average Delivery Time' },
-    { value: '4.9/5', label: 'Client Satisfaction' },
-  ]
-  
-  return (
-    <section className="py-24 sm:py-32 bg-gradient-to-b from-[#0a0a0a] to-[#0d0d0d]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className="text-4xl sm:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
-              <div className="text-sm text-gray-400">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Pricing Section
-function PricingSection() {
-  return (
-    <section id="pricing" className="py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge className="mb-6">Pricing</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            Simple, Transparent{' '}
-            <span className="gradient-text">Pricing</span>
-          </h2>
-          <p className="text-lg text-gray-400">
-            No hidden fees, no long-term contracts. Just results.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {/* Starter */}
-          <Card className="flex flex-col">
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">AI Visibility Audit</h3>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-bold">$1,500</span>
-              </div>
-              <p className="text-sm text-gray-400 mt-2">One-time comprehensive analysis</p>
-            </div>
-            
-            <ul className="space-y-3 mb-8 flex-1">
-              {[
-                'Multi-platform AI testing',
-                'Competitive landscape analysis',
-                'Review sentiment report',
-                'Trust gap identification',
-                'Prioritized recommendations',
-                '5-day delivery',
-              ].map((feature, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            
-            <Button variant="outline" className="w-full">
-              Request Quote
-            </Button>
-          </Card>
-          
-          {/* Professional */}
-          <Card className="flex flex-col relative border-blue-500/30">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <Badge className="bg-blue-500 text-white border-0">Most Popular</Badge>
-            </div>
-            
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">Complete Package</h3>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-bold">$3,500</span>
-              </div>
-              <p className="text-sm text-gray-400 mt-2">Audit + Implementation support</p>
-            </div>
-            
-            <ul className="space-y-3 mb-8 flex-1">
-              {[
-                'Everything in Audit package',
-                'Content optimization strategy',
-                'FAQ & trust content creation',
-                'Implementation roadmap',
-                '2 weeks of support',
-                'Monthly check-in call',
-              ].map((feature, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            
-            <Button className="w-full">
-              Request Quote
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </Card>
-          
-          {/* Enterprise */}
-          <Card className="flex flex-col">
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">Enterprise</h3>
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-bold">Custom</span>
-              </div>
-              <p className="text-sm text-gray-400 mt-2">For dealership groups & OEMs</p>
-            </div>
-            
-            <ul className="space-y-3 mb-8 flex-1">
-              {[
-                'Multi-location audit',
-                'Group-wide benchmarking',
-                'Custom reporting dashboard',
-                'Dedicated account manager',
-                'Quarterly strategy reviews',
-                'Priority support',
-              ].map((feature, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            
-            <Button variant="outline" className="w-full">
-              Contact Sales
-            </Button>
-          </Card>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// FAQ Section
-function FAQSection() {
-  const faqs = [
-    {
-      question: 'What exactly is "AI visibility"?',
-      answer: 'AI visibility refers to how often and how prominently your dealership appears in responses from AI assistants like ChatGPT, Claude, and Perplexity when potential customers ask car-buying questions. It\'s the new frontier of digital presence.',
-    },
-    {
-      question: 'How is this different from regular SEO?',
-      answer: 'Traditional SEO optimizes for Google\'s ranking algorithm. AI visibility optimizes for how large language models understand and recommend businesses. The signals are different — LLMs prioritize reputation, expertise, and trust over traditional ranking factors.',
-    },
-    {
-      question: 'How long does the audit take?',
-      answer: 'From our discovery call to report delivery is typically 5 business days. Rush delivery is available for an additional fee if you need insights sooner.',
-    },
-    {
-      question: 'Do you implement the recommendations?',
-      answer: 'Our Complete Package includes implementation support and strategy guidance. For execution, you can either work with us or use our detailed roadmap with your internal team or existing agency.',
-    },
-    {
-      question: 'Which AI platforms do you test?',
-      answer: 'We test visibility across ChatGPT (including Search), Claude, Google Gemini, Perplexity, and Microsoft Copilot. We also monitor emerging platforms as they gain market share.',
-    },
-    {
-      question: 'What if I\'m not satisfied with the audit?',
-      answer: 'We stand behind our work. If you don\'t find actionable insights in your audit, we\'ll refund 100% of your fee. No questions asked.',
-    },
-  ]
-  
-  return (
-    <section id="faq" className="py-24 sm:py-32 bg-[#0a0a0a]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <Badge className="mb-6">FAQ</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            Frequently Asked{' '}
-            <span className="gradient-text">Questions</span>
-          </h2>
-        </div>
-        
-        <div className="space-y-4">
-          {faqs.map((faq, i) => (
-            <Card key={i} className="group">
-              <details className="group">
-                <summary className="flex items-center justify-between cursor-pointer list-none">
-                  <h3 className="text-lg font-medium pr-4">{faq.question}</h3>
-                  <ChevronRight className="w-5 h-5 text-gray-400 transition-transform group-open:rotate-90 flex-shrink-0" />
-                </summary>
-                <p className="mt-4 text-gray-400 leading-relaxed">{faq.answer}</p>
-              </details>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Final CTA Section
-function FinalCTASection() {
-  return (
-    <section className="py-24 sm:py-32 relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px]" />
-      </div>
-      
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
-          Ready to Become{' '}
-          <span className="gradient-text">Unmissable?</span>
-        </h2>
-        <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
-          Don't let your competitors own the AI conversation. 
-          Get your free AI visibility audit and see where you stand.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-          <input 
-            type="email" 
-            placeholder="Enter your email"
-            className="w-full px-6 py-4 rounded-full bg-[#141414] border border-white/[0.06] text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, i) => (
+        <motion.div
+          key={i}
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+        >
+          <Star
+            className={`w-4 h-4 ${
+              i < Math.floor(rating) ? "fill-kingkong-green text-kingkong-green" : "text-gray-600"
+            }`}
           />
-          <Button size="lg" className="w-full sm:w-auto whitespace-nowrap">
-            Get Free Audit
-            <ChevronRight className="w-5 h-5" />
-          </Button>
-        </div>
-        
-        <p className="text-sm text-gray-500 mt-6">
-          Or{' '}
-          <a href="#" className="text-blue-400 hover:text-blue-300 underline">
-            book a 15-minute discovery call
-          </a>
-        </p>
-      </div>
-    </section>
-  )
+        </motion.div>
+      ))}
+      <span className="ml-2 text-sm text-gray-400">{rating}</span>
+    </div>
+  );
 }
 
-// Footer
-function Footer() {
-  return (
-    <footer className="py-12 border-t border-white/[0.06]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8 mb-12">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Search className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-xl font-bold">Vizbiz</span>
-            </div>
-            <p className="text-gray-400 max-w-sm mb-6">
-              Making car dealerships unmissable to AI. 
-              The future of automotive search is here.
-            </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
-                <Mail className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">Product</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">AI Audit</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Sentiment Analysis</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Trust Gap Analysis</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Implementation</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">Company</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500">
-            © 2025 Vizbiz. All rights reserved.
-          </p>
-          <p className="text-sm text-gray-500">
-            Made for car dealerships that want to win.
-          </p>
-        </div>
-      </div>
-    </footer>
-  )
-}
-
-// Main Page Component
 export default function LandingPage() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const today = new Date().toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    alert("Thanks! We'll send your AVI Score analysis shortly.");
+    setIsSubmitting(false);
+    setEmail("");
+  };
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
-      <Navbar />
-      <HeroSection />
-      <ProblemSection />
-      <SolutionSection />
-      <HowItWorksSection />
-      <StatsSection />
-      <PricingSection />
-      <FAQSection />
-      <FinalCTASection />
-      <Footer />
+    <main className="min-h-screen bg-kingkong-dark">
+      {/* HERO */}
+      <section className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-kingkong-dark via-kingkong-dark to-kingkong-card opacity-50" />
+        
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute top-20 left-10 w-72 h-72 bg-kingkong-green/5 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-kingkong-green/5 rounded-full blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-kingkong-green/10 text-kingkong-green text-sm font-medium mb-6">
+              <Sparkles className="w-4 h-4" />
+              Now Auditing Dealerships in Greater Toronto
+            </span>
+          </motion.div>
+
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
+            <span className="gradient-text">Like AI-Powered Visibility*</span>
+          </motion.h1>
+
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-2xl sm:text-3xl md:text-4xl text-white font-semibold mb-2">For Car Dealerships</motion.p>
+
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-gray-400 text-sm mb-8">*But it&apos;s 100% ethical (pinky promise)</motion.p>
+
+          <motion.form initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}
+            onSubmit={handleEmailSubmit} className="max-w-md mx-auto mb-8">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Input type="email" placeholder="Enter your email and we'll show you the 'magic'" value={email}
+                onChange={(e) => setEmail(e.target.value)} required
+                className="flex-1 h-14 bg-kingkong-card border-kingkong-green/30 text-white placeholder:text-gray-500 input-glow" />
+              <motion.button type="submit" disabled={isSubmitting} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                className="cta-button h-14 px-8 rounded-md font-semibold text-white whitespace-nowrap disabled:opacity-50">
+                {isSubmitting ? "Revealing..." : "Reveal My Score"}
+              </motion.button>
+            </div>
+          </motion.form>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-400">
+            <div className="flex items-center gap-2">
+              <StarRating rating={4.9} />
+              <span className="text-kingkong-green font-semibold">4.9 stars</span>
+              <span>from 23 dealership audits</span>
+            </div>
+            <span className="hidden sm:block text-gray-600">|</span>
+            <span>Updated: {today}</span>
+          </motion.div>
+        </div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2">
+          <motion.button onClick={() => scrollToSection("letter")} animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}
+            className="text-gray-500 hover:text-kingkong-green transition-colors">
+            <ChevronDown className="w-8 h-8" />
+          </motion.button>
+        </motion.div>
+      </section>
+
+      {/* LETTER */}
+      <section id="letter" className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <FadeInSection>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-12 text-white">Dear Dealership Owner,</h2>
+          </FadeInSection>
+
+          <FadeInSection delay={0.1}>
+            <p className="text-xl text-gray-300 mb-6">We get it.</p>
+          </FadeInSection>
+
+          <FadeInSection delay={0.2}>
+            <p className="text-lg text-gray-400 mb-6 leading-relaxed">Selling cars is harder than ever. Really freaking hard.</p>
+            <p className="text-lg text-gray-400 mb-6 leading-relaxed">
+              You&apos;re probably lying awake at 3 AM wondering where your next walk-in is coming from.
+            </p>
+          </FadeInSection>
+
+          <FadeInSection delay={0.3}>
+            <div className="bg-kingkong-card rounded-xl p-6 my-8 border-l-4 border-kingkong-green">
+              <p className="text-gray-300 italic mb-4">&ldquo;Should we do TikTok? Start a podcast? Hire that automotive influencer?&rdquo;</p>
+              <p className="text-gray-300 italic mb-4">&ldquo;What about chatbots? Errrrrrbody&apos;s talkin&apos; bout chatbots.&rdquo;</p>
+            </div>
+          </FadeInSection>
+
+          <FadeInSection delay={0.4}>
+            <p className="text-xl text-kingkong-green font-semibold mb-4">We call this mess a rat&apos;s nest.</p>
+            <p className="text-lg text-gray-400 mb-12 leading-relaxed">
+              Also known as hell. It&apos;s hot and muggy there. And we&apos;d rather rub scorpion chillies in our eyes than run a dealership that way.
+            </p>
+          </FadeInSection>
+
+          <FadeInSection delay={0.5}>
+            <div className="bg-gradient-to-r from-kingkong-green/20 to-transparent rounded-xl p-8 my-12 border border-kingkong-green/30">
+              <h3 className="text-2xl font-bold text-white mb-4">
+                You&apos;re Reading This Right Now Because, In Some Way Shape or Form, Your Dealership Isn&apos;t Where You Want It To Be.
+              </h3>
+            </div>
+          </FadeInSection>
+
+          <FadeInSection delay={0.6}>
+            <ul className="space-y-3 mb-12">
+              {["More floor traffic.", "More units moved.", "More gross per deal.", "More freedom from manufacturer dependency."].map((item, i) => (
+                <li key={i} className="flex items-center gap-3 text-lg text-gray-300">
+                  <CheckCircle2 className="w-5 h-5 text-kingkong-green flex-shrink-0" />{item}
+                </li>
+              ))}
+            </ul>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* CHANGED */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kingkong-card/50">
+        <div className="max-w-3xl mx-auto">
+          <FadeInSection>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-white">The Way People Buy Cars Has Fundamentally Changed.</h2>
+          </FadeInSection>
+
+          <FadeInSection delay={0.1}>
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-gray-300 mb-4">Old way:</h3>
+              <p className="text-lg text-gray-400 leading-relaxed">
+                Customer Googles &ldquo;Honda dealership Oakville&rdquo; → clicks 3-4 websites → visits 2 dealerships → buys from the one they like.
+              </p>
+            </div>
+          </FadeInSection>
+
+          <FadeInSection delay={0.2}>
+            <div className="bg-kingkong-dark rounded-xl p-6 mb-8 border border-kingkong-green/30">
+              <h3 className="text-xl font-semibold text-kingkong-green mb-4">New way:</h3>
+              <p className="text-lg text-gray-300 leading-relaxed">
+                Customer asks ChatGPT <em>&ldquo;best Honda dealership near me with good service department&rdquo;</em> → gets <strong>ONE answer</strong> with 3 citations → visits the dealership that&apos;s mentioned → buys.
+              </p>
+            </div>
+          </FadeInSection>
+
+          <FadeInSection delay={0.3}>
+            <div className="bg-kingkong-green/10 rounded-xl p-6 mb-8 border-l-4 border-kingkong-green">
+              <h3 className="text-xl font-semibold text-white mb-4">The difference?</h3>
+              <p className="text-lg text-gray-300 leading-relaxed">
+                In the new way, if AI doesn&apos;t mention you, <strong className="text-kingkong-green">you don&apos;t exist.</strong>
+              </p>
+              <p className="text-gray-400 mt-4">The customer never sees your website. Never sees your inventory. Never compares your prices.</p>
+              <p className="text-kingkong-green font-bold text-xl mt-4">Period.</p>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* AVI SCORE */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <FadeInSection>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-white">Introducing: The AVI Score™</h2>
+            <p className="text-gray-400 mb-6">(AI Visibility Intelligence Score)</p>
+          </FadeInSection>
+
+          <FadeInSection delay={0.1}>
+            <p className="text-lg text-gray-300 mb-8">Your proprietary 0-100 metric that tells you exactly where you stand.</p>
+          </FadeInSection>
+
+          <FadeInSection delay={0.2}>
+            <div className="bg-kingkong-dark rounded-2xl p-8 border-2 border-kingkong-green/50 mb-12">
+              <h3 className="text-xl font-semibold text-white mb-6">Calculated from 23 data points across 5 categories:</h3>
+              <div className="space-y-4">
+                {[
+                  { name: "Presence", percent: "30%", desc: "Are you visible where AI looks?", icon: MapPin },
+                  { name: "Authority", percent: "25%", desc: "Do AI systems trust and cite you?", icon: Shield },
+                  { name: "Sentiment", percent: "20%", desc: "What do your reviews tell AI?", icon: Star },
+                  { name: "Content", percent: "15%", desc: "Can AI understand what you offer?", icon: BookOpen },
+                  { name: "Technical", percent: "10%", desc: "Can AI access your site?", icon: Zap },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 bg-kingkong-card rounded-lg p-4">
+                    <div className="w-10 h-10 rounded-lg bg-kingkong-green/20 flex items-center justify-center">
+                      <item.icon className="w-5 h-5 text-kingkong-green" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-white">{item.name}</span>
+                        <span className="text-kingkong-green font-bold">{item.percent}</span>
+                      </div>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* PATHS */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kingkong-card/50">
+        <div className="max-w-5xl mx-auto">
+          <FadeInSection>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">Choose Your Own Adventure</h2>
+              <p className="text-gray-400">*cue angels singing*</p>
+            </div>
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <FadeInSection delay={0.2}>
+              <motion.div whileHover={{ scale: 1.02, y: -4 }} className="bg-kingkong-card rounded-2xl p-8 border border-kingkong-green/30 h-full">
+                <div className="w-12 h-12 rounded-xl bg-kingkong-green/20 flex items-center justify-center mb-6">
+                  <BarChart3 className="w-6 h-6 text-kingkong-green" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Path A: Get the Audit</h3>
+                <p className="text-gray-400 mb-6">AI Visibility Audit Only. Complete AVI Score assessment and priority roadmap.</p>
+                <div className="text-3xl font-bold text-kingkong-green mb-6">$1,500-2,500</div>
+                <ul className="space-y-3 mb-8">
+                  {["Complete AVI Score assessment", "Competitor benchmarking", "Priority action roadmap", "20 AI queries tested"].map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-gray-300 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-kingkong-green flex-shrink-0" />{item}
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full cta-button h-12 text-lg font-semibold">Get the Audit</Button>
+              </motion.div>
+            </FadeInSection>
+
+            <FadeInSection delay={0.3}>
+              <motion.div whileHover={{ scale: 1.02, y: -4 }} className="bg-gradient-to-br from-kingkong-green/20 to-kingkong-card rounded-2xl p-8 border-2 border-kingkong-green h-full relative">
+                <span className="absolute top-4 right-4 px-3 py-1 bg-kingkong-green text-black text-xs font-bold rounded-full">MOST POPULAR</span>
+                <div className="w-12 h-12 rounded-xl bg-kingkong-green flex items-center justify-center mb-6">
+                  <Zap className="w-6 h-6 text-black" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Path B: Done For You</h3>
+                <p className="text-gray-400 mb-6">Audit + Implementation. We run the audit AND implement the quick wins for you.</p>
+                <div className="text-3xl font-bold text-kingkong-green mb-6">$3,500-5,000</div>
+                <ul className="space-y-3 mb-8">
+                  {["Everything in Path A", "Google Business Profile optimization", "Schema markup installation", "Review response strategy", "30-day implementation support"].map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-gray-300 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-kingkong-green flex-shrink-0" />{item}
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full cta-button h-12 text-lg font-semibold">Do It For Me</Button>
+              </motion.div>
+            </FadeInSection>
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <FadeInSection>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { icon: Users, value: 23, suffix: "+", label: "Dealerships Audited" },
+                { icon: BarChart3, value: 500, suffix: "+", label: "AI Queries Tracked" },
+                { icon: DollarSign, value: 2500000, suffix: "+", label: "Revenue Generated" },
+                { icon: MapPin, value: 12, suffix: "", label: "Markets Served" },
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="w-12 h-12 rounded-xl bg-kingkong-green/20 flex items-center justify-center mx-auto mb-4">
+                    <stat.icon className="w-6 h-6 text-kingkong-green" />
+                  </div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">
+                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <p className="text-gray-400 text-sm">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kingkong-card/50">
+        <div className="max-w-5xl mx-auto">
+          <FadeInSection>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-white text-center">What Dealership Owners Say</h2>
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { name: "Mike R.", role: "GM, Honda Dealership", quote: "The AVI Score opened our eyes. We had no idea AI was recommending our competitors." },
+              { name: "Sarah T.", role: "Owner, Ford Store", quote: "Within 60 days of implementing the roadmap, we saw a 40% increase in 'AI referred' customers." },
+              { name: "John D.", role: "Dealer Principal", quote: "Best investment we've made. The audit paid for itself in the first month." },
+            ].map((testimonial, i) => (
+              <FadeInSection key={i} delay={i * 0.1}>
+                <motion.div whileHover={{ y: -4 }} className="bg-kingkong-card rounded-xl p-6 border border-gray-800">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-kingkong-green/20 flex items-center justify-center">
+                      <span className="text-kingkong-green font-bold">{testimonial.name[0]}</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">{testimonial.name}</p>
+                      <p className="text-sm text-gray-400">{testimonial.role}</p>
+                    </div>
+                  </div>
+                  <StarRating rating={5} />
+                  <p className="text-gray-300 mt-4 text-sm leading-relaxed">&ldquo;{testimonial.quote}&rdquo;</p>
+                </motion.div>
+              </FadeInSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AUTHORITY */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <FadeInSection>
+            <div className="bg-gradient-to-br from-kingkong-card to-kingkong-dark rounded-2xl p-8 md:p-12 border border-kingkong-green/30">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="w-32 h-40 bg-kingkong-green/20 rounded-lg flex items-center justify-center flex-shrink-0 border-2 border-kingkong-green/50">
+                  <BookOpen className="w-16 h-16 text-kingkong-green" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-white mb-4">We Literally Wrote The Book</h2>
+                  <p className="text-gray-400 mb-6">
+                    Our team pioneered AI Visibility Intelligence for automotive. We&apos;ve tested thousands of AI queries, analyzed hundreds of dealerships, and built the first comprehensive scoring system for AI search optimization.
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="flex -space-x-2">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="w-10 h-10 rounded-full bg-kingkong-green/30 border-2 border-kingkong-dark flex items-center justify-center">
+                          <Users className="w-5 h-5 text-kingkong-green" />
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-400">Trusted by <span className="text-kingkong-green font-semibold">23+ dealerships</span> in GTA</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kingkong-card/50">
+        <div className="max-w-3xl mx-auto">
+          <FadeInSection>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-white text-center">Frequently Asked Questions</h2>
+          </FadeInSection>
+
+          <FadeInSection delay={0.1}>
+            <Accordion type="single" collapsible className="space-y-4">
+              {[
+                { q: "What exactly is the AVI Score?", a: "The AVI (AI Visibility Intelligence) Score is a proprietary 0-100 metric that measures how visible and recommended your dealership is across AI search systems like ChatGPT, Perplexity, and Google AI Overviews." },
+                { q: "How is this different from SEO?", a: "Traditional SEO focuses on ranking in Google search results. AI Visibility focuses on being cited and recommended by AI systems when customers ask questions. It's a completely different optimization target." },
+                { q: "How long does an audit take?", a: "The audit process takes 5-7 business days. We test 20+ AI queries, analyze your digital presence, benchmark against competitors, and deliver a comprehensive report with actionable recommendations." },
+                { q: "Will this actually get me more customers?", a: "73% of car buyers now use AI assistants for research. If your dealership isn't being recommended by AI, you're invisible to those customers. Our clients typically see measurable increases in AI-referred traffic within 60-90 days." },
+                { q: "Do you guarantee results?", a: "For our Full Management clients, we guarantee a 10+ point AVI Score improvement within 90 days, or month 4 is free. No fine print, no excuses." },
+              ].map((faq, i) => (
+                <AccordionItem key={i} value={`item-${i}`} className="bg-kingkong-card rounded-xl border border-gray-800 px-6 data-[state=open]:border-kingkong-green/50">
+                  <AccordionTrigger className="text-white hover:text-kingkong-green text-left py-4">{faq.q}</AccordionTrigger>
+                  <AccordionContent className="text-gray-400 pb-4">{faq.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto text-center">
+          <FadeInSection>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-white">Ready to See Your AVI Score?</h2>
+          </FadeInSection>
+
+          <FadeInSection delay={0.1}>
+            <p className="text-xl text-gray-400 mb-8">Book your free 30-minute assessment. No pitch fest. No pressure. Just clarity.</p>
+          </FadeInSection>
+
+          <FadeInSection delay={0.2}>
+            <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto mb-8">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Input type="email" placeholder="Enter your email address" value={email}
+                  onChange={(e) => setEmail(e.target.value)} required
+                  className="flex-1 h-14 bg-kingkong-card border-kingkong-green/30 text-white placeholder:text-gray-500 input-glow" />
+                <motion.button type="submit" disabled={isSubmitting} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                  className="cta-button h-14 px-8 rounded-md font-semibold text-white whitespace-nowrap disabled:opacity-50">
+                  {isSubmitting ? "Booking..." : "Get Your Free AVI Score"}
+                </motion.button>
+              </div>
+            </form>
+          </FadeInSection>
+
+          <FadeInSection delay={0.3}>
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
+              <Shield className="w-4 h-4 text-kingkong-green" />
+              <span>100% confidential. No spam. Unsubscribe anytime.</span>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-6 h-6 text-kingkong-green" />
+              <span className="font-bold text-white">Vizbiz</span>
+            </div>
+            <p className="text-gray-500 text-sm">© 2024 Vizbiz. AI Visibility Intelligence for Car Dealerships.</p>
+          </div>
+        </div>
+      </footer>
     </main>
-  )
+  );
 }
