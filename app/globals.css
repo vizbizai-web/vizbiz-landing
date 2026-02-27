@@ -3,45 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --radius: 0.5rem;
   --background: #000000;
   --foreground: #ffffff;
-  --card: #111111;
-  --card-foreground: #ffffff;
-  --popover: #111111;
-  --popover-foreground: #ffffff;
-  --primary: #ff3333;
-  --primary-foreground: #ffffff;
-  --secondary: #1a1a1a;
-  --secondary-foreground: #ffffff;
-  --muted: #1a1a1a;
-  --muted-foreground: #888888;
-  --accent: #ff3333;
-  --accent-foreground: #ffffff;
-  --destructive: #ff3333;
-  --destructive-foreground: #ffffff;
-  --border: #333333;
-  --input: #222222;
-  --ring: #ff3333;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
-  }
+body {
+  background-color: #000000;
+  color: #ffffff;
 }
 
 /* Breaking news ticker animation */
 @keyframes ticker {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-50%);
   }
 }
 
@@ -52,20 +29,15 @@
 /* Pulse animation for CTAs */
 @keyframes aggressive-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.7);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
   }
   50% {
-    box-shadow: 0 0 0 20px rgba(255, 51, 51, 0);
+    box-shadow: 0 0 0 20px rgba(220, 38, 38, 0);
   }
 }
 
 .aggressive-pulse {
   animation: aggressive-pulse 2s ease-in-out infinite;
-}
-
-/* Red glow effect */
-.red-glow {
-  text-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
 }
 
 /* Glitch effect on hover */
@@ -74,75 +46,12 @@
 }
 
 @keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-/* Quote block styling */
-.quote-block {
-  background: linear-gradient(135deg, rgba(255, 51, 51, 0.1) 0%, rgba(255, 51, 51, 0.05) 100%);
-  border-left: 4px solid #ff3333;
-}
-
-/* Path card styling */
-.path-card {
-  background: linear-gradient(135deg, #1a1a1a 0%, #111111 100%);
-  border: 1px solid #333333;
-  transition: all 0.3s ease;
-}
-
-.path-card:hover {
-  border-color: #ff3333;
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(255, 51, 51, 0.1);
-}
-
-.path-card-popular {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-  border: 2px solid #ff3333;
-}
-
-/* FAQ item styling */
-.faq-item {
-  background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
-  border: 1px solid #e5e5e5;
-  transition: all 0.2s ease;
-}
-
-.faq-item:hover {
-  border-color: #22c55e;
-}
-
-/* Card hover effect */
-.card-hover {
-  transition: all 0.3s ease;
-}
-
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* Selection styling */
-::selection {
-  background: rgba(255, 51, 51, 0.3);
-  color: #ffffff;
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
 }
 
 /* Custom scrollbar */
@@ -155,10 +64,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ff3333;
+  background: #dc2626;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #cc0000;
+  background: #b91c1c;
 }

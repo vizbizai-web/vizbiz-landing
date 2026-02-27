@@ -23,7 +23,7 @@ export default function Home() {
     <main className="min-h-screen bg-black text-white overflow-x-hidden">
       {/* Breaking News Ticker */}
       <div className="bg-red-600 text-white py-2 overflow-hidden relative z-50">
-        <div className="ticker whitespace-nowrap flex items-center">
+        <div className="whitespace-nowrap flex items-center" style={{animation: 'ticker 30s linear infinite'}}>
           <span className="mx-8 font-bold text-sm md:text-base">🚨 BREAKING: AI Search Just Killed Traditional SEO</span>
           <span className="mx-8 font-bold text-sm md:text-base">⚡ URGENT: Dealerships Losing 40% of Traffic to AI Overviews</span>
           <span className="mx-8 font-bold text-sm md:text-base">🔥 WARNING: Your Competitors Are Already Adapting</span>
@@ -49,7 +49,7 @@ export default function Home() {
           </h1>
 
           {/* Sub Headline */}
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-red-500 mb-8 md:mb-12 max-w-4xl leading-tight red-glow">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-red-500 mb-8 md:mb-12 max-w-4xl leading-tight ">
             The AI Search Revolution That's Stealing Your Customers While You Sleep
           </h2>
 
@@ -63,7 +63,7 @@ export default function Home() {
           {/* First CTA */}
           <button 
             onClick={scrollToForm}
-            className="aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 rounded-sm transition-all transform hover:scale-105 glitch"
+            className="aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 rounded-sm transition-all transform hover:scale-105 "
           >
             GET YOUR FREE AVI SCORE →
           </button>
@@ -230,7 +230,7 @@ export default function Home() {
           {/* Second CTA */}
           <button 
             onClick={scrollToForm}
-            className="aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 rounded-sm transition-all transform hover:scale-105 glitch"
+            className="aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 rounded-sm transition-all transform hover:scale-105 "
           >
             STOP THE BLEEDING → GET MY AVI SCORE
           </button>
@@ -503,7 +503,7 @@ export default function Home() {
 
               <button
                 type="submit"
-                className="w-full aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-xl md:text-2xl px-8 py-5 rounded-sm transition-all transform hover:scale-[1.02] glitch"
+                className="w-full aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-xl md:text-2xl px-8 py-5 rounded-sm transition-all transform hover:scale-[1.02] "
               >
                 GET MY FREE AVI SCORE →
               </button>
@@ -593,7 +593,7 @@ export default function Home() {
 
           <button 
             onClick={scrollToForm}
-            className="aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-xl md:text-2xl px-10 md:px-16 py-5 md:py-6 rounded-sm transition-all transform hover:scale-105 glitch"
+            className="aggressive-pulse bg-red-600 hover:bg-red-700 text-white font-bold text-xl md:text-2xl px-10 md:px-16 py-5 md:py-6 rounded-sm transition-all transform hover:scale-105 "
           >
             GET MY AVI SCORE NOW →
           </button>
