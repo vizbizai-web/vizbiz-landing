@@ -51,13 +51,20 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        kingkong: {
-          dark: "#0a0a0a",
-          card: "#141414",
-          green: "#22c55e",
-          "green-dark": "#16a34a",
-          "green-light": "#4ade80",
+        // Exact King Kong colors
+        kk: {
+          dark: "#0a0404",
+          white: "#ffffff",
+          gray: "#f3f3f3",
+          "gray-dark": "#373737",
+          green: "#a2de00",
+          "green-dark": "#8bb600",
+          "green-light": "#b8f033",
         },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        condensed: ['Inter', 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,34 +80,34 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "bounce-arrow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(10px)" },
+        },
         "fade-in-up": {
           from: { opacity: "0", transform: "translateY(30px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(34, 197, 94, 0.4)" },
-          "50%": { boxShadow: "0 0 40px rgba(34, 197, 94, 0.7)" },
-        },
-        "count-up": {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(162, 222, 0, 0.4)" },
+          "50%": { boxShadow: "0 0 40px rgba(162, 222, 0, 0.7)" },
         },
         "star-pulse": {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.1)" },
         },
-        "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "bounce-arrow": "bounce-arrow 2s ease-in-out infinite",
         "fade-in-up": "fade-in-up 0.6s ease-out forwards",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         "star-pulse": "star-pulse 2s ease-in-out infinite",
-        "float": "float 3s ease-in-out infinite",
+      },
+      backgroundImage: {
+        'diagonal-stripes': "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(162, 222, 0, 0.03) 10px, rgba(162, 222, 0, 0.03) 20px)",
+        'green-gradient': "linear-gradient(135deg, #8bb600 0%, #a2de00 100%)",
       },
     },
   },
