@@ -2,247 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-:root {
-  --background: 4 20% 3%;
-  --foreground: 0 0% 100%;
-  --card: 0 0% 100%;
-  --card-foreground: 4 20% 3%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 4 20% 3%;
-  --primary: 75 100% 44%;
-  --primary-foreground: 4 20% 3%;
-  --secondary: 0 0% 95%;
-  --secondary-foreground: 4 20% 3%;
-  --muted: 0 0% 95%;
-  --muted-foreground: 0 0% 22%;
-  --accent: 75 100% 44%;
-  --accent-foreground: 4 20% 3%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 85%;
-  --input: 0 0% 85%;
-  --ring: 75 100% 44%;
-  --radius: 0.5rem;
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 60% 55%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 270 60% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
+  }
 }
 
-* {
-  border-color: hsl(var(--border));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
+/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Glow effects */
+.glow-blue {
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
 }
 
-::-webkit-scrollbar-track {
-  background: #0a0404;
+.glow-purple {
+  box-shadow: 0 0 40px rgba(147, 51, 234, 0.3);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #a2de00;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #8bb600;
-}
-
-/* Selection */
-::selection {
-  background: rgba(162, 222, 0, 0.3);
-  color: #ffffff;
-}
-
-/* Diagonal stripes pattern for hero */
-.diagonal-stripes {
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 2px,
-    rgba(162, 222, 0, 0.02) 2px,
-    rgba(162, 222, 0, 0.02) 4px
-  );
-}
-
-/* Condensed bold headlines */
-.headline-condensed {
-  font-family: 'Inter', Impact, 'Arial Black', sans-serif;
-  font-weight: 900;
-  font-stretch: condensed;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  text-transform: uppercase;
-}
-
-/* Green gradient text */
-.gradient-text-green {
-  background: linear-gradient(135deg, #8bb600 0%, #a2de00 50%, #b8f033 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* CTA Button styles - exact King Kong style */
-.cta-button {
-  background: linear-gradient(135deg, #8bb600 0%, #a2de00 100%);
-  color: #0a0404;
-  font-weight: 700;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(162, 222, 0, 0.39);
-}
-
-.cta-button:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(162, 222, 0, 0.5);
-  background: linear-gradient(135deg, #9bc800 0%, #b0e810 100%);
-}
-
-/* Green border input */
-.input-green {
-  border: 2px solid #a2de00;
-  background: transparent;
-  color: #ffffff;
-  transition: all 0.3s ease;
-}
-
-.input-green::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.input-green:focus {
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(162, 222, 0, 0.2);
-  border-color: #b8f033;
-}
-
-/* Star rating */
-.star-filled {
-  fill: #a2de00;
-  color: #a2de00;
-}
-
-/* Card hover effects */
+/* Card hover effect */
 .card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply transition-all duration-300 ease-out;
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* Path card specific styles */
-.path-card {
-  background: #ffffff;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.path-card:hover {
-  border-color: #a2de00;
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.path-card-popular {
-  border: 2px solid #a2de00;
-  position: relative;
-}
-
-/* Section backgrounds */
-.section-dark {
-  background-color: #0a0404;
-}
-
-.section-white {
-  background-color: #ffffff;
-}
-
-.section-gray {
-  background-color: #f3f3f3;
-}
-
-.section-gray-dark {
-  background-color: #373737;
-}
-
-/* Animated underline for links */
-.animated-underline {
-  position: relative;
-}
-
-.animated-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #a2de00;
-  transition: width 0.3s ease;
-}
-
-.animated-underline:hover::after {
-  width: 100%;
-}
-
-/* Quote block styling */
-.quote-block {
-  border-left: 4px solid #a2de00;
-  background: rgba(162, 222, 0, 0.05);
-}
-
-/* FAQ accordion styling */
-.faq-item {
-  border: 1px solid #e5e5e5;
-  transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-  border-color: #a2de00;
-}
-
-.faq-item[data-state="open"] {
-  border-color: #a2de00;
-  background: rgba(162, 222, 0, 0.02);
-}
-
-/* Trust bar styling */
-.trust-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-/* Bouncing arrow */
-.bounce-arrow {
-  animation: bounce-arrow 2s ease-in-out infinite;
-}
-
-@keyframes bounce-arrow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  }
-}
-
-/* Counter animation */
-.counter-number {
-  font-variant-numeric: tabular-nums;
+  @apply -translate-y-1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }

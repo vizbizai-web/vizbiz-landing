@@ -1,662 +1,695 @@
-"use client";
+import { 
+  Search, 
+  MessageSquare, 
+  Shield, 
+  Map, 
+  Phone, 
+  FileSearch, 
+  ClipboardList, 
+  Rocket,
+  ChevronRight,
+  Check,
+  Mail,
+  Linkedin,
+  Twitter,
+  Menu,
+  X
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-// Star Rating Component
-function StarRating({ rating = 4.9, showText = true }: { rating?: number; showText?: boolean }) {
-  const fullStars = Math.floor(rating);
+// UI Components
+function Button({ 
+  children, 
+  variant = 'primary', 
+  size = 'md', 
+  className,
+  ...props 
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { 
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
+  size?: 'sm' | 'md' | 'lg'
+}) {
+  const variants = {
+    primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25',
+    secondary: 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-600/25',
+    outline: 'border border-white/20 hover:bg-white/5 text-white',
+    ghost: 'hover:bg-white/5 text-white',
+  }
+  
+  const sizes = {
+    sm: 'px-4 py-2 text-sm',
+    md: 'px-6 py-3 text-base',
+    lg: 'px-8 py-4 text-lg',
+  }
   
   return (
-    <div className="flex items-center gap-1">
-      {[...Array(5)].map((_, i) => (
-        <svg
-          key={i}
-          className={`w-4 h-4 ${i < fullStars ? 'text-kk-green fill-kk-green' : 'text-gray-400'}`}
-          viewBox="0 0 20 20"
-          fill={i < fullStars ? "currentColor" : "none"}
-          stroke="currentColor"
-          strokeWidth={i < fullStars ? 0 : 1.5}
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-      {showText && <span className="ml-2 text-sm font-medium">{rating}</span>}
-    </div>
-  );
-}
-
-// Animated Counter Component
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (isInView) {
-      const duration = 2000;
-      const steps = 60;
-      const increment = target / steps;
-      let current = 0;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          setCount(target);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(current));
-        }
-      }, duration / steps);
-      return () => clearInterval(timer);
-    }
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref} className="counter-number">
-      {count.toLocaleString()}{suffix}
-    </span>
-  );
-}
-
-// Fade In Section Component
-function FadeInSection({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
-      className={className}
+    <button 
+      className={cn(
+        'rounded-full font-medium transition-all duration-200 flex items-center gap-2',
+        variants[variant],
+        sizes[size],
+        className
+      )}
+      {...props}
     >
       {children}
-    </motion.div>
-  );
+    </button>
+  )
 }
 
-// Chevron Down Icon
-function ChevronDownIcon({ className = "w-6 h-6" }: { className?: string }) {
+function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-    </svg>
-  );
+    <div className={cn(
+      'bg-[#141414] border border-white/[0.06] rounded-2xl p-6 card-hover',
+      className
+    )}>
+      {children}
+    </div>
+  )
+}
+
+function Badge({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <span className={cn(
+      'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20',
+      className
+    )}>
+      {children}
+    </span>
+  )
+}
+
+// Navigation
+function Navbar() {
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <Search className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-xl font-bold">Vizbiz</span>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-8">
+            <a href="#problem" className="text-sm text-gray-400 hover:text-white transition-colors">Problem</a>
+            <a href="#solution" className="text-sm text-gray-400 hover:text-white transition-colors">Solution</a>
+            <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">How It Works</a>
+            <a href="#pricing" className="text-sm text-gray-400 hover:text-white transition-colors">Pricing</a>
+            <a href="#faq" className="text-sm text-gray-400 hover:text-white transition-colors">FAQ</a>
+          </div>
+          
+          <Button size="sm">
+            Get Audit
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </nav>
+  )
+}
+
+// Hero Section
+function HeroSection() {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[128px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px]" />
+      </div>
+      
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="animate-fade-in">
+          <Badge className="mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+            Now accepting new dealerships
+          </Badge>
+          
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+            Make Your Dealership{' '}
+            <span className="gradient-text">Unmissable to AI</span>
+          </h1>
+          
+          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Car buyers use ChatGPT, Claude, and Perplexity to find dealerships. 
+            Most dealers are invisible. <span className="text-white font-medium">We fix that.</span>
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" className="w-full sm:w-auto animate-pulse-glow">
+              Get Your AI Visibility Audit
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+            <Button variant="outline" size="lg" className="w-full sm:w-auto">
+              See How It Works
+            </Button>
+          </div>
+          
+          {/* Trusted by */}
+          <div className="mt-16 pt-8 border-t border-white/[0.06]">
+            <p className="text-sm text-gray-500 mb-6">Trusted by innovative dealerships</p>
+            <div className="flex items-center justify-center gap-8 opacity-50">
+              {['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes'].map((brand) => (
+                <span key={brand} className="text-lg font-semibold text-gray-400">{brand}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Problem Section
+function ProblemSection() {
+  return (
+    <section id="problem" className="py-24 sm:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <Badge className="mb-6">The Problem</Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+              The AI Search Revolution Has{' '}
+              <span className="text-red-400">Already Started</span>
+            </h2>
+            <p className="text-lg text-gray-400 mb-8 leading-relaxed">
+              While you're optimizing for Google, your customers are asking ChatGPT 
+              "What's the best Honda dealership near me?" — and if you're not in 
+              the answer, you don't exist.
+            </p>
+            
+            <div className="space-y-4">
+              {[
+                '73% of car buyers now use AI assistants for research',
+                'Traditional SEO doesn\'t guarantee AI visibility',
+                'Dealerships without AI presence are becoming invisible',
+                'Your competitors are already adapting',
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <X className="w-3 h-3 text-red-400" />
+                  </div>
+                  <span className="text-gray-300">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-3xl" />
+            <Card className="relative p-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 pb-4 border-b border-white/[0.06]">
+                  <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                    <MessageSquare className="w-5 h-5 text-green-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium">ChatGPT Search</p>
+                    <p className="text-sm text-gray-500">"Best BMW dealer in Toronto"</p>
+                  </div>
+                </div>
+                
+                <div className="bg-[#0a0a0a] rounded-xl p-4">
+                  <p className="text-gray-400 text-sm mb-2">AI Response:</p>
+                  <p className="text-white">
+                    "Based on recent reviews and reputation, <span className="text-green-400 font-medium">Toronto BMW Central</span> stands out 
+                    as the top choice. They have excellent customer feedback..."
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  Your competitor just won a customer
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Solution/Services Section
+function SolutionSection() {
+  const services = [
+    {
+      icon: Search,
+      title: 'AI Visibility Audit',
+      description: 'Comprehensive analysis of how AI assistants perceive and rank your dealership. We test your visibility across ChatGPT, Claude, Gemini, and Perplexity.',
+      color: 'blue',
+    },
+    {
+      icon: MessageSquare,
+      title: 'Review Sentiment Analysis',
+      description: 'AI-powered analysis of your review landscape. We identify sentiment patterns that influence AI recommendations and trust signals.',
+      color: 'purple',
+    },
+    {
+      icon: Shield,
+      title: 'Trust Gap Analysis',
+      description: 'Discover what trust signals AI looks for that you might be missing. We benchmark you against competitors winning AI recommendations.',
+      color: 'green',
+    },
+    {
+      icon: Map,
+      title: 'AI Search Optimization Roadmap',
+      description: 'Actionable strategy to improve your AI visibility. Priority-ranked recommendations based on impact and implementation effort.',
+      color: 'orange',
+    },
+  ]
+  
+  const colorClasses: Record<string, { bg: string; text: string }> = {
+    blue: { bg: 'bg-blue-500/10', text: 'text-blue-400' },
+    purple: { bg: 'bg-purple-500/10', text: 'text-purple-400' },
+    green: { bg: 'bg-green-500/10', text: 'text-green-400' },
+    orange: { bg: 'bg-orange-500/10', text: 'text-orange-400' },
+  }
+  
+  return (
+    <section id="solution" className="py-24 sm:py-32 bg-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <Badge className="mb-6">Our Services</Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            Everything You Need to{' '}
+            <span className="gradient-text">Dominate AI Search</span>
+          </h2>
+          <p className="text-lg text-gray-400">
+            We provide end-to-end AI visibility solutions tailored for car dealerships. 
+            From audit to implementation, we've got you covered.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          {services.map((service, i) => (
+            <Card key={i} className="group">
+              <div className={cn(
+                'w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110',
+                colorClasses[service.color].bg
+              )}>
+                <service.icon className={cn('w-6 h-6', colorClasses[service.color].text)} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
+              <p className="text-gray-400 leading-relaxed">{service.description}</p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// How It Works Section
+function HowItWorksSection() {
+  const steps = [
+    {
+      number: '01',
+      icon: Phone,
+      title: 'Discovery Call',
+      description: '15-minute conversation to understand your dealership, goals, and current online presence. No pitch, just listening.',
+    },
+    {
+      number: '02',
+      icon: FileSearch,
+      title: 'AI Audit',
+      description: 'We run comprehensive tests across all major AI platforms, analyzing how they perceive and rank your dealership.',
+    },
+    {
+      number: '03',
+      icon: ClipboardList,
+      title: 'Report Delivery',
+      description: 'Receive a detailed report with findings, competitive analysis, and prioritized recommendations within 5 business days.',
+    },
+    {
+      number: '04',
+      icon: Rocket,
+      title: 'Implementation',
+      description: 'Work with us to implement recommendations, or take the roadmap and execute with your team. Your choice.',
+    },
+  ]
+  
+  return (
+    <section id="how-it-works" className="py-24 sm:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <Badge className="mb-6">Process</Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            How It{' '}
+            <span className="gradient-text">Works</span>
+          </h2>
+          <p className="text-lg text-gray-400">
+            Simple, transparent process designed for busy dealership owners. 
+            From first call to actionable insights in under a week.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {steps.map((step, i) => (
+            <div key={i} className="relative">
+              <Card className="h-full">
+                <span className="text-4xl font-bold text-white/10">{step.number}</span>
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center my-4">
+                  <step.icon className="w-6 h-6 text-blue-400" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-400 leading-relaxed">{step.description}</p>
+              </Card>
+              {i < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-[2px] bg-gradient-to-r from-blue-500/50 to-transparent" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Stats Section
+function StatsSection() {
+  const stats = [
+    { value: '200+', label: 'Dealerships Analyzed' },
+    { value: '73%', label: 'Buyers Using AI Search' },
+    { value: '5 Days', label: 'Average Delivery Time' },
+    { value: '4.9/5', label: 'Client Satisfaction' },
+  ]
+  
+  return (
+    <section className="py-24 sm:py-32 bg-gradient-to-b from-[#0a0a0a] to-[#0d0d0d]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {stats.map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="text-4xl sm:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
+              <div className="text-sm text-gray-400">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Pricing Section
+function PricingSection() {
+  return (
+    <section id="pricing" className="py-24 sm:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <Badge className="mb-6">Pricing</Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            Simple, Transparent{' '}
+            <span className="gradient-text">Pricing</span>
+          </h2>
+          <p className="text-lg text-gray-400">
+            No hidden fees, no long-term contracts. Just results.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {/* Starter */}
+          <Card className="flex flex-col">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-2">AI Visibility Audit</h3>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-bold">$1,500</span>
+              </div>
+              <p className="text-sm text-gray-400 mt-2">One-time comprehensive analysis</p>
+            </div>
+            
+            <ul className="space-y-3 mb-8 flex-1">
+              {[
+                'Multi-platform AI testing',
+                'Competitive landscape analysis',
+                'Review sentiment report',
+                'Trust gap identification',
+                'Prioritized recommendations',
+                '5-day delivery',
+              ].map((feature, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
+                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            
+            <Button variant="outline" className="w-full">
+              Request Quote
+            </Button>
+          </Card>
+          
+          {/* Professional */}
+          <Card className="flex flex-col relative border-blue-500/30">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <Badge className="bg-blue-500 text-white border-0">Most Popular</Badge>
+            </div>
+            
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-2">Complete Package</h3>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-bold">$3,500</span>
+              </div>
+              <p className="text-sm text-gray-400 mt-2">Audit + Implementation support</p>
+            </div>
+            
+            <ul className="space-y-3 mb-8 flex-1">
+              {[
+                'Everything in Audit package',
+                'Content optimization strategy',
+                'FAQ & trust content creation',
+                'Implementation roadmap',
+                '2 weeks of support',
+                'Monthly check-in call',
+              ].map((feature, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
+                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            
+            <Button className="w-full">
+              Request Quote
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </Card>
+          
+          {/* Enterprise */}
+          <Card className="flex flex-col">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-2">Enterprise</h3>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-bold">Custom</span>
+              </div>
+              <p className="text-sm text-gray-400 mt-2">For dealership groups & OEMs</p>
+            </div>
+            
+            <ul className="space-y-3 mb-8 flex-1">
+              {[
+                'Multi-location audit',
+                'Group-wide benchmarking',
+                'Custom reporting dashboard',
+                'Dedicated account manager',
+                'Quarterly strategy reviews',
+                'Priority support',
+              ].map((feature, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
+                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            
+            <Button variant="outline" className="w-full">
+              Contact Sales
+            </Button>
+          </Card>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// FAQ Section
+function FAQSection() {
+  const faqs = [
+    {
+      question: 'What exactly is "AI visibility"?',
+      answer: 'AI visibility refers to how often and how prominently your dealership appears in responses from AI assistants like ChatGPT, Claude, and Perplexity when potential customers ask car-buying questions. It\'s the new frontier of digital presence.',
+    },
+    {
+      question: 'How is this different from regular SEO?',
+      answer: 'Traditional SEO optimizes for Google\'s ranking algorithm. AI visibility optimizes for how large language models understand and recommend businesses. The signals are different — LLMs prioritize reputation, expertise, and trust over traditional ranking factors.',
+    },
+    {
+      question: 'How long does the audit take?',
+      answer: 'From our discovery call to report delivery is typically 5 business days. Rush delivery is available for an additional fee if you need insights sooner.',
+    },
+    {
+      question: 'Do you implement the recommendations?',
+      answer: 'Our Complete Package includes implementation support and strategy guidance. For execution, you can either work with us or use our detailed roadmap with your internal team or existing agency.',
+    },
+    {
+      question: 'Which AI platforms do you test?',
+      answer: 'We test visibility across ChatGPT (including Search), Claude, Google Gemini, Perplexity, and Microsoft Copilot. We also monitor emerging platforms as they gain market share.',
+    },
+    {
+      question: 'What if I\'m not satisfied with the audit?',
+      answer: 'We stand behind our work. If you don\'t find actionable insights in your audit, we\'ll refund 100% of your fee. No questions asked.',
+    },
+  ]
+  
+  return (
+    <section id="faq" className="py-24 sm:py-32 bg-[#0a0a0a]">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <Badge className="mb-6">FAQ</Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            Frequently Asked{' '}
+            <span className="gradient-text">Questions</span>
+          </h2>
+        </div>
+        
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <Card key={i} className="group">
+              <details className="group">
+                <summary className="flex items-center justify-between cursor-pointer list-none">
+                  <h3 className="text-lg font-medium pr-4">{faq.question}</h3>
+                  <ChevronRight className="w-5 h-5 text-gray-400 transition-transform group-open:rotate-90 flex-shrink-0" />
+                </summary>
+                <p className="mt-4 text-gray-400 leading-relaxed">{faq.answer}</p>
+              </details>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Final CTA Section
+function FinalCTASection() {
+  return (
+    <section className="py-24 sm:py-32 relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px]" />
+      </div>
+      
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+          Ready to Become{' '}
+          <span className="gradient-text">Unmissable?</span>
+        </h2>
+        <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
+          Don't let your competitors own the AI conversation. 
+          Get your free AI visibility audit and see where you stand.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <input 
+            type="email" 
+            placeholder="Enter your email"
+            className="w-full px-6 py-4 rounded-full bg-[#141414] border border-white/[0.06] text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+          />
+          <Button size="lg" className="w-full sm:w-auto whitespace-nowrap">
+            Get Free Audit
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
+        
+        <p className="text-sm text-gray-500 mt-6">
+          Or{' '}
+          <a href="#" className="text-blue-400 hover:text-blue-300 underline">
+            book a 15-minute discovery call
+          </a>
+        </p>
+      </div>
+    </section>
+  )
+}
+
+// Footer
+function Footer() {
+  return (
+    <footer className="py-12 border-t border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-4 gap-8 mb-12">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <Search className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-xl font-bold">Vizbiz</span>
+            </div>
+            <p className="text-gray-400 max-w-sm mb-6">
+              Making car dealerships unmissable to AI. 
+              The future of automotive search is here.
+            </p>
+            <div className="flex items-center gap-4">
+              <a href="#" className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-[#141414] flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold mb-4">Product</h4>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li><a href="#" className="hover:text-white transition-colors">AI Audit</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Sentiment Analysis</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Trust Gap Analysis</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Implementation</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold mb-4">Company</h4>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-gray-500">
+            © 2025 Vizbiz. All rights reserved.
+          </p>
+          <p className="text-sm text-gray-500">
+            Made for car dealerships that want to win.
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
 }
 
 // Main Page Component
 export default function LandingPage() {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const today = new Date().toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert("Thanks! We'll send your AVI Score analysis shortly.");
-    setIsSubmitting(false);
-    setEmail("");
-  };
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <main className="min-h-screen">
-      {/* ==================== HERO SECTION ==================== */}
-      <section className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 bg-kk-dark overflow-hidden">
-        {/* Diagonal stripes pattern */}
-        <div className="absolute inset-0 diagonal-stripes pointer-events-none" />
-        
-        {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Main Headline */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="headline-condensed text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-2">
-              Like AI Visibility*
-            </h1>
-            <h2 className="headline-condensed text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-6">
-              For Dealerships
-            </h2>
-          </motion.div>
-
-          {/* Subtext */}
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-white/60 text-lg mb-12"
-          >
-            *But it&apos;s 100% ethical (pinky promise)
-          </motion.p>
-
-          {/* Email Input */}
-          <motion.form 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.3 }}
-            onSubmit={handleEmailSubmit} 
-            className="max-w-xl mx-auto mb-8"
-          >
-            <div className="flex flex-col sm:flex-row gap-0">
-              <input
-                type="email"
-                placeholder="Enter your email here and we'll send you some 'magic'"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="flex-1 h-14 px-6 input-green rounded-l-md sm:rounded-r-none rounded-r-md sm:rounded-l-md text-base"
-              />
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="cta-button h-14 px-8 rounded-r-md sm:rounded-l-none rounded-l-md sm:rounded-r-md font-bold whitespace-nowrap disabled:opacity-50"
-              >
-                {isSubmitting ? "Sending..." : "Get Started"}
-              </button>
-            </div>
-          </motion.form>
-
-          {/* Trust Bar */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="trust-bar text-white/80 text-sm"
-          >
-            <StarRating rating={4.9} showText={false} />
-            <span className="font-semibold text-white">4.9 stars</span>
-            <span>out of 23 reviews</span>
-            <span className="hidden sm:inline mx-2">|</span>
-            <span>Updated: {today}</span>
-          </motion.div>
-        </div>
-
-        {/* Bouncing Arrow */}
-        <motion.div 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
-          transition={{ delay: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <button 
-            onClick={() => scrollToSection("letter")} 
-            className="bounce-arrow text-kk-green hover:text-white transition-colors"
-          >
-            <ChevronDownIcon className="w-10 h-10" />
-          </button>
-        </motion.div>
-      </section>
-
-      {/* ==================== LETTER SECTION ==================== */}
-      <section id="letter" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <FadeInSection>
-            <h2 className="text-4xl sm:text-5xl font-bold text-kk-dark mb-12">
-              Dear dealership owner,
-            </h2>
-          </FadeInSection>
-
-          <FadeInSection delay={0.1}>
-            <p className="text-xl text-kk-dark mb-6">We get it.</p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.15}>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Selling cars is harder than ever. Really freaking hard.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.2}>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              You&apos;re probably lying awake at 3 AM wondering where your next walk-in is coming from.
-            </p>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Stressed and sleeping like a teething two-year-old.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.25}>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              As your hair goes fifty shades of grey from all the uncertainty.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.3}>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              And to top it all off.
-            </p>
-            <p className="text-lg text-kk-gray-dark mb-8 leading-relaxed">
-              You&apos;re being pulled in a bazillion different directions.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.35}>
-            <p className="text-xl text-kk-dark font-semibold mb-6">Ohmygawd!</p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.4}>
-            <div className="quote-block rounded-r-xl p-6 my-8">
-              <p className="text-kk-gray-dark italic mb-3">&ldquo;Should we do TikTok? Start a podcast? Hire that automotive influencer?&rdquo;</p>
-              <p className="text-kk-gray-dark italic mb-3">&ldquo;What about chatbots? Errrrrrbody&apos;s talkin&apos; bout chatbots.&rdquo;</p>
-              <p className="text-kk-gray-dark italic mb-3">&ldquo;Should we run some ads? Drop $5k on a new website? Post on LinkedIn five times per day?&rdquo;</p>
-              <p className="text-kk-gray-dark italic">*somebody please pull out my eyelashes*</p>
-            </div>
-          </FadeInSection>
-
-          <FadeInSection delay={0.45}>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Look, most dealership owners have a bad case of &apos;shiny object syndrome&apos;…
-            </p>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Mixed with a scoop of ADD… and a sprinkle of &quot;I can do everything&quot;.
-            </p>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              And they end up doing a little bit of this… a little bit of that.
-            </p>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Soon, they&apos;re screaming at their computer with all the things they &quot;have to&quot; do.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.5}>
-            <p className="text-xl text-kk-green font-bold mb-4">We call this mess a rat&apos;s nest.</p>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Also known as hell. It&apos;s hot and muggy there.
-            </p>
-            <p className="text-lg text-kk-gray-dark mb-12 leading-relaxed">
-              And we&apos;d rather rub scorpion chillies in our eyes than run a dealership that way.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.55}>
-            <div className="bg-kk-green/10 rounded-xl p-8 my-12 border-l-4 border-kk-green">
-              <h3 className="text-2xl font-bold text-kk-dark">
-                You&apos;re Reading This Right Now Because, In Some Way Shape or Form, Your Dealership Isn&apos;t Where You Want It To Be.
-              </h3>
-            </div>
-          </FadeInSection>
-
-          <FadeInSection delay={0.6}>
-            <p className="text-lg text-kk-gray-dark mb-6 leading-relaxed">
-              Or maybe you&apos;re flying… and you simply want more.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.65}>
-            <ul className="space-y-3 mb-12">
-              {[
-                "More floor traffic.",
-                "More units moved.",
-                "More gross per deal.",
-                "More freedom from manufacturer dependency.",
-                "More time with your family.",
-                "More security for your team."
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-lg text-kk-dark">
-                  <span className="text-kk-green font-bold">✓</span>{item}
-                </li>
-              ))}
-            </ul>
-          </FadeInSection>
-
-          <FadeInSection delay={0.7}>
-            <p className="text-lg text-kk-gray-dark mb-12 leading-relaxed">
-              Whatever it is for you…
-            </p>
-            <p className="text-xl text-kk-dark font-semibold mb-8">
-              It all starts by &quot;choosing your own adventure&quot; below…
-            </p>
-            <p className="text-kk-gray-dark italic">*cue angels singing*</p>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ==================== TWO PATHS SECTION ==================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kk-gray">
-        <div className="max-w-5xl mx-auto">
-          <FadeInSection>
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-kk-dark mb-4">Choose Your Own Adventure</h2>
-              <p className="text-kk-gray-dark italic">*cue angels singing*</p>
-            </div>
-          </FadeInSection>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Path A - DIY */}
-            <FadeInSection delay={0.2}>
-              <div className="path-card rounded-2xl p-8 h-full flex flex-col">
-                <div className="w-16 h-16 rounded-full bg-kk-green/20 flex items-center justify-center mb-6">
-                  <svg className="w-8 h-8 text-kk-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-kk-dark mb-4">Get the Audit</h3>
-                <p className="text-kk-gray-dark mb-6 flex-grow">
-                  AI Visibility Audit Only. Complete AVI Score assessment and priority roadmap. Perfect for DIY dealership owners who want the blueprint.
-                </p>
-                <div className="mb-6">
-                  <span className="text-3xl font-bold text-kk-dark">$1,500-2,500</span>
-                </div>
-                <div className="mb-6">
-                  <StarRating rating={4.9} showText={false} />
-                  <span className="text-sm text-kk-gray-dark ml-2">4.9 out of 5 stars</span>
-                </div>
-                <button className="cta-button w-full h-14 rounded-md font-bold">
-                  Get Started
-                </button>
-              </div>
-            </FadeInSection>
-
-            {/* Path B - Done For You */}
-            <FadeInSection delay={0.3}>
-              <div className="path-card path-card-popular rounded-2xl p-8 h-full flex flex-col relative">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-kk-green text-kk-dark text-xs font-bold rounded-full uppercase tracking-wider">
-                  Most Popular
-                </span>
-                <div className="w-16 h-16 rounded-full bg-kk-green flex items-center justify-center mb-6">
-                  <svg className="w-8 h-8 text-kk-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-kk-dark mb-4">Done For You</h3>
-                <p className="text-kk-gray-dark mb-6 flex-grow">
-                  Audit + Implementation. We run the audit AND implement the quick wins for you. Full-service AI visibility transformation.
-                </p>
-                <div className="mb-6">
-                  <span className="text-3xl font-bold text-kk-dark">$3,500-5,000</span>
-                </div>
-                <div className="mb-6">
-                  <StarRating rating={5.0} showText={false} />
-                  <span className="text-sm text-kk-gray-dark ml-2">5.0 out of 5 stars</span>
-                </div>
-                <button className="cta-button w-full h-14 rounded-md font-bold">
-                  Get Started
-                </button>
-              </div>
-            </FadeInSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== STATS/SOCIAL PROOF SECTION ==================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kk-gray-dark">
-        <div className="max-w-5xl mx-auto">
-          <FadeInSection>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: 23, suffix: "+", label: "Dealerships Audited" },
-                { value: 500, suffix: "+", label: "AI Queries Tested" },
-                { value: 2.5, suffix: "M+", label: "Revenue Generated", isDecimal: true },
-                { value: 12, suffix: "", label: "Markets Served" },
-              ].map((stat, i) => (
-                <div key={i} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-kk-green mb-2">
-                    {stat.isDecimal ? (
-                      <span>${stat.value}{stat.suffix}</span>
-                    ) : (
-                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                    )}
-                  </div>
-                  <p className="text-white/70 text-sm">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </FadeInSection>
-
-          {/* Trust Logos */}
-          <FadeInSection delay={0.2}>
-            <div className="mt-16 text-center">
-              <p className="text-white/50 text-sm mb-8 uppercase tracking-widest">Trusted by dealerships across</p>
-              <div className="flex flex-wrap justify-center gap-8 text-white/30">
-                {["Greater Toronto", "Hamilton", "Mississauga", "Oakville", "Brampton", "Vaughan"].map((city, i) => (
-                  <span key={i} className="text-lg font-medium">{city}</span>
-                ))}
-              </div>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ==================== BOOK/AUTHORITY SECTION ==================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <FadeInSection>
-            <div className="flex flex-col md:flex-row items-center gap-12">
-              {/* Book Visual */}
-              <div className="w-full md:w-1/3">
-                <div className="aspect-[3/4] bg-gradient-to-br from-kk-green/20 to-kk-green/5 rounded-lg border-2 border-kk-green/30 flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 diagonal-stripes opacity-50" />
-                  <div className="text-center p-8">
-                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-kk-green/20 flex items-center justify-center">
-                      <svg className="w-10 h-10 text-kk-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                      </svg>
-                    </div>
-                    <p className="text-kk-dark font-bold text-lg">The AVI Score™</p>
-                    <p className="text-kk-gray-dark text-sm">Methodology</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="w-full md:w-2/3">
-                <h2 className="text-3xl sm:text-4xl font-bold text-kk-dark mb-6">
-                  We Literally Wrote The Book on AI Visibility for Automotive
-                </h2>
-                <p className="text-kk-gray-dark mb-6 leading-relaxed">
-                  Our team pioneered AI Visibility Intelligence for car dealerships. We&apos;ve tested thousands of AI queries, analyzed hundreds of dealership digital footprints, and built the first comprehensive scoring system specifically for automotive AI search optimization.
-                </p>
-                <p className="text-kk-gray-dark mb-8 leading-relaxed">
-                  The AVI Score™ methodology is based on 23 data points across 5 core categories: Presence, Authority, Sentiment, Content, and Technical. It&apos;s the same framework we use to help dealerships dominate AI search results.
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="flex -space-x-3">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="w-10 h-10 rounded-full bg-kk-gray border-2 border-white flex items-center justify-center">
-                        <span className="text-kk-gray-dark text-xs font-bold">{String.fromCharCode(64 + i)}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-kk-gray-dark text-sm">
-                    Trusted by <span className="text-kk-green font-bold">23+ dealerships</span> in GTA
-                  </p>
-                </div>
-              </div>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ==================== TESTIMONIALS SECTION ==================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kk-gray">
-        <div className="max-w-5xl mx-auto">
-          <FadeInSection>
-            <h2 className="text-3xl sm:text-4xl font-bold text-kk-dark mb-4 text-center">
-              What Dealership Owners Say
-            </h2>
-            <p className="text-kk-gray-dark text-center mb-12">Don&apos;t just take our word for it</p>
-          </FadeInSection>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { 
-                name: "Mike R.", 
-                role: "GM, Honda Dealership", 
-                quote: "The AVI Score opened our eyes. We had no idea AI was recommending our competitors over us. Within 60 days of implementing the roadmap, we saw measurable results." 
-              },
-              { 
-                name: "Sarah T.", 
-                role: "Owner, Ford Store", 
-                quote: "Best investment we've made this year. The audit paid for itself in the first month. Our service department is busier than ever from AI referrals." 
-              },
-              { 
-                name: "John D.", 
-                role: "Dealer Principal", 
-                quote: "Finally, someone who understands how AI actually works for dealerships. The Done For You package was worth every penny. Highly recommend." 
-              },
-            ].map((testimonial, i) => (
-              <FadeInSection key={i} delay={i * 0.1}>
-                <div className="bg-white rounded-xl p-6 h-full card-hover">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-kk-green/20 flex items-center justify-center">
-                      <span className="text-kk-green font-bold text-lg">{testimonial.name[0]}</span>
-                    </div>
-                    <div>
-                      <p className="font-bold text-kk-dark">{testimonial.name}</p>
-                      <p className="text-sm text-kk-gray-dark">{testimonial.role}</p>
-                    </div>
-                  </div>
-                  <StarRating rating={5} showText={false} />
-                  <p className="text-kk-gray-dark mt-4 text-sm leading-relaxed">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </p>
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== FAQ SECTION ==================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <FadeInSection>
-            <h2 className="text-3xl sm:text-4xl font-bold text-kk-dark mb-12 text-center">
-              Frequently Asked Questions
-            </h2>
-          </FadeInSection>
-
-          <FadeInSection delay={0.1}>
-            <Accordion type="single" collapsible className="space-y-4">
-              {[
-                { 
-                  q: "What exactly is the AVI Score?", 
-                  a: "The AVI (AI Visibility Intelligence) Score is a proprietary 0-100 metric that measures how visible and recommended your dealership is across AI search systems like ChatGPT, Perplexity, Google AI Overviews, and Claude. It analyzes 23 data points across 5 categories to give you a complete picture of your AI presence." 
-                },
-                { 
-                  q: "How is this different from regular SEO?", 
-                  a: "Traditional SEO focuses on ranking in Google&apos;s blue links. AI Visibility focuses on being cited, recommended, and mentioned by AI systems when customers ask questions like &apos;best Honda dealership near me&apos; or &apos;who has the best service department in Oakville.&apos; It&apos;s a completely different optimization target with different success metrics." 
-                },
-                { 
-                  q: "How long does the audit take?", 
-                  a: "The audit process takes 5-7 business days. We test 20+ AI queries relevant to your market, analyze your digital presence across multiple platforms, benchmark against your top 3 competitors, and deliver a comprehensive 30+ page report with actionable recommendations prioritized by impact." 
-                },
-                { 
-                  q: "Will this actually get me more customers?", 
-                  a: "73% of car buyers now use AI assistants for research before visiting a dealership. If your dealership isn&apos;t being recommended by AI, you&apos;re invisible to those customers. Our clients typically see measurable increases in AI-referred traffic and &apos;I heard about you from ChatGPT&apos; customers within 60-90 days." 
-                },
-                { 
-                  q: "Do you guarantee results?", 
-                  a: "For our Done For You clients, we guarantee a 10+ point AVI Score improvement within 90 days, or month 4 is free. No fine print, no excuses. We&apos;re that confident in our methodology because we&apos;ve seen it work for dozens of dealerships." 
-                },
-                { 
-                  q: "What markets do you serve?", 
-                  a: "We currently serve car dealerships in the Greater Toronto Area, including Toronto, Mississauga, Brampton, Oakville, Hamilton, Vaughan, and surrounding markets. We&apos;re expanding to other Canadian markets soon." 
-                },
-              ].map((faq, i) => (
-                <AccordionItem 
-                  key={i} 
-                  value={`item-${i}`} 
-                  className="faq-item rounded-xl px-6"
-                >
-                  <AccordionTrigger className="text-kk-dark hover:text-kk-green text-left py-4 font-semibold">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-kk-gray-dark pb-4 leading-relaxed">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ==================== FINAL CTA SECTION ==================== */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-kk-dark relative overflow-hidden">
-        {/* Diagonal stripes pattern */}
-        <div className="absolute inset-0 diagonal-stripes pointer-events-none" />
-        
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <FadeInSection>
-            <h2 className="headline-condensed text-white text-4xl sm:text-5xl md:text-6xl mb-6">
-              Ready to See Your AVI Score?
-            </h2>
-          </FadeInSection>
-
-          <FadeInSection delay={0.1}>
-            <p className="text-xl text-white/70 mb-8">
-              Book your free 30-minute assessment. No pitch fest. No pressure. Just clarity.
-            </p>
-          </FadeInSection>
-
-          <FadeInSection delay={0.2}>
-            <form onSubmit={handleEmailSubmit} className="max-w-xl mx-auto mb-8">
-              <div className="flex flex-col sm:flex-row gap-0">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="flex-1 h-14 px-6 input-green rounded-l-md sm:rounded-r-none rounded-r-md sm:rounded-l-md text-base"
-                />
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="cta-button h-14 px-8 rounded-r-md sm:rounded-l-none rounded-l-md sm:rounded-r-md font-bold whitespace-nowrap disabled:opacity-50"
-                >
-                  {isSubmitting ? "Booking..." : "Get Your Free AVI Score"}
-                </button>
-              </div>
-            </form>
-          </FadeInSection>
-
-          <FadeInSection delay={0.3}>
-            <div className="flex items-center justify-center gap-2 text-sm text-white/50">
-              <svg className="w-4 h-4 text-kk-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span>100% confidential. No spam. Unsubscribe anytime.</span>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ==================== FOOTER ==================== */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-kk-dark border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <svg className="w-6 h-6 text-kk-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              <span className="font-bold text-white text-lg">Vizbiz</span>
-            </div>
-            <p className="text-white/50 text-sm">
-              © {new Date().getFullYear()} Vizbiz. AI Visibility Intelligence for Car Dealerships.
-            </p>
-          </div>
-        </div>
-      </footer>
+    <main className="min-h-screen bg-[#0a0a0a]">
+      <Navbar />
+      <HeroSection />
+      <ProblemSection />
+      <SolutionSection />
+      <HowItWorksSection />
+      <StatsSection />
+      <PricingSection />
+      <FAQSection />
+      <FinalCTASection />
+      <Footer />
     </main>
-  );
+  )
 }

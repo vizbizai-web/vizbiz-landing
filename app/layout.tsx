@@ -1,30 +1,27 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "AI Visibility for Car Dealerships | Vizbiz",
-  description: "Like AI Visibility* For Dealerships. *But it's 100% ethical (pinky promise). Discover your dealership's AI Visibility Intelligence (AVI) Score.",
-  keywords: "AI visibility, car dealership, ChatGPT, AI search, automotive marketing, AVI score, AI reputation",
-};
+  title: 'Vizbiz - AI Competitive Visibility for Car Dealerships',
+  description: 'Make your dealership unmissable to AI. Car buyers use ChatGPT, Claude, and Perplexity to find dealerships. Most dealers are invisible. We fix that.',
+  keywords: ['AI visibility', 'car dealerships', 'AI search', 'automotive marketing', 'ChatGPT', 'Claude', 'Perplexity'],
+  openGraph: {
+    title: 'Vizbiz - AI Competitive Visibility for Car Dealerships',
+    description: 'Make your dealership unmissable to AI. Get your free AI visibility audit today.',
+    type: 'website',
+  },
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
-          rel="stylesheet" 
-        />
-      </head>
-      <body className="antialiased">
+    <html lang="en" className="dark">
+      <body className="antialiased bg-[#0a0a0a] text-white">
         {children}
       </body>
     </html>
-  );
+  )
 }

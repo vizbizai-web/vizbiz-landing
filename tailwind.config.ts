@@ -1,6 +1,4 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+module.exports = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -51,20 +49,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Exact King Kong colors
-        kk: {
-          dark: "#0a0404",
-          white: "#ffffff",
-          gray: "#f3f3f3",
-          "gray-dark": "#373737",
-          green: "#a2de00",
-          "green-dark": "#8bb600",
-          "green-light": "#b8f033",
-        },
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        condensed: ['Inter', 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,38 +64,22 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "bounce-arrow": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(10px)" },
-        },
-        "fade-in-up": {
-          from: { opacity: "0", transform: "translateY(30px)" },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(162, 222, 0, 0.4)" },
-          "50%": { boxShadow: "0 0 40px rgba(162, 222, 0, 0.7)" },
-        },
-        "star-pulse": {
-          "0%, 100%": { transform: "scale(1)" },
-          "50%": { transform: "scale(1.1)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(59, 130, 246, 0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(59, 130, 246, 0.5)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "bounce-arrow": "bounce-arrow 2s ease-in-out infinite",
-        "fade-in-up": "fade-in-up 0.6s ease-out forwards",
+        "fade-in": "fade-in 0.6s ease-out forwards",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
-        "star-pulse": "star-pulse 2s ease-in-out infinite",
-      },
-      backgroundImage: {
-        'diagonal-stripes': "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(162, 222, 0, 0.03) 10px, rgba(162, 222, 0, 0.03) 20px)",
-        'green-gradient': "linear-gradient(135deg, #8bb600 0%, #a2de00 100%)",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-};
-
-export default config;
+  plugins: [],
+}
