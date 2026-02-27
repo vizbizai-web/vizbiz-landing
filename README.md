@@ -1,65 +1,36 @@
-# Vizbiz Landing Page
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-AI Competitive Visibility for Car Dealerships — Landing Page
+## Getting Started
 
-## 🚀 Quick Start
+First, run the development server:
 
 ```bash
-# Install dependencies
-npm install
-
-# Run development server
 npm run dev
-
-# Build for production
-npm run build
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## 📁 Project Structure
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```
-vizbiz-landing/
-├── app/
-│   ├── globals.css      # Global styles & Tailwind
-│   ├── layout.tsx       # Root layout with metadata
-│   └── page.tsx         # Main landing page (all sections)
-├── lib/
-│   └── utils.ts         # Utility functions (cn helper)
-├── public/              # Static assets
-├── next.config.js       # Next.js config (static export)
-├── tailwind.config.ts   # Tailwind configuration
-├── tsconfig.json        # TypeScript config
-└── package.json
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 🎨 Design System
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- **Background:** `#0a0a0a` (dark)
-- **Cards:** `#141414` with subtle borders
-- **Primary:** Blue (`#3b82f6`)
-- **Secondary:** Purple (`#9333ea`)
-- **Font:** System sans-serif
+## Learn More
 
-## 📄 Sections
+To learn more about Next.js, take a look at the following resources:
 
-1. **Hero** — Main headline + CTA
-2. **Problem** — The AI search revolution
-3. **Solution** — 4 service cards
-4. **How It Works** — 4-step process
-5. **Stats** — Social proof numbers
-6. **Pricing** — 3-tier pricing table
-7. **FAQ** — Accordion questions
-8. **Final CTA** — Email capture
-9. **Footer** — Links & contact
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## 🌐 Deployment
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-Built for static export to `dist/` folder. Deploy to:
-- Vercel
-- Netlify
-- Cloudflare Pages
-- Any static host
+## Deploy on Vercel
 
-## 📞 Contact
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-For Vizbiz inquiries: [your-email@vizbiz.ai](mailto:your-email@vizbiz.ai)
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
