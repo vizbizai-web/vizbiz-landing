@@ -1,49 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-bebas);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --radius: 0.5rem;
@@ -62,6 +19,7 @@
   --accent: #ff3333;
   --accent-foreground: #ffffff;
   --destructive: #ff3333;
+  --destructive-foreground: #ffffff;
   --border: #333333;
   --input: #222222;
   --ring: #ff3333;
@@ -73,13 +31,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
   }
-}
-
-/* Aggressive typography */
-.font-display {
-  font-family: var(--font-bebas), Impact, sans-serif;
 }
 
 /* Breaking news ticker animation */
@@ -99,12 +52,10 @@
 /* Pulse animation for CTAs */
 @keyframes aggressive-pulse {
   0%, 100% {
-    transform: scale(1);
     box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.7);
   }
   50% {
-    transform: scale(1.02);
-    box-shadow: 0 0 30px 10px rgba(255, 51, 51, 0.3);
+    box-shadow: 0 0 0 20px rgba(255, 51, 51, 0);
   }
 }
 
@@ -112,9 +63,18 @@
   animation: aggressive-pulse 2s ease-in-out infinite;
 }
 
-/* Glitch effect */
+/* Red glow effect */
+.red-glow {
+  text-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
+}
+
+/* Glitch effect on hover */
+.glitch:hover {
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
 @keyframes glitch {
-  0%, 100% {
+  0% {
     transform: translate(0);
   }
   20% {
@@ -129,33 +89,76 @@
   80% {
     transform: translate(2px, -2px);
   }
-}
-
-.glitch:hover {
-  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-}
-
-/* Marquee */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
   100% {
-    transform: translateX(-50%);
+    transform: translate(0);
   }
 }
 
-.animate-marquee {
-  animation: marquee 20s linear infinite;
+/* Quote block styling */
+.quote-block {
+  background: linear-gradient(135deg, rgba(255, 51, 51, 0.1) 0%, rgba(255, 51, 51, 0.05) 100%);
+  border-left: 4px solid #ff3333;
 }
 
-/* Red glow */
-.red-glow {
-  text-shadow: 0 0 20px rgba(255, 51, 51, 0.5), 0 0 40px rgba(255, 51, 51, 0.3);
+/* Path card styling */
+.path-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #111111 100%);
+  border: 1px solid #333333;
+  transition: all 0.3s ease;
 }
 
-/* Selection color */
+.path-card:hover {
+  border-color: #ff3333;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(255, 51, 51, 0.1);
+}
+
+.path-card-popular {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  border: 2px solid #ff3333;
+}
+
+/* FAQ item styling */
+.faq-item {
+  background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+  border: 1px solid #e5e5e5;
+  transition: all 0.2s ease;
+}
+
+.faq-item:hover {
+  border-color: #22c55e;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Selection styling */
 ::selection {
+  background: rgba(255, 51, 51, 0.3);
+  color: #ffffff;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
   background: #ff3333;
-  color: white;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cc0000;
 }

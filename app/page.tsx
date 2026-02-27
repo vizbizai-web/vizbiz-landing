@@ -43,7 +43,7 @@ export default function Home() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.9] mb-6 md:mb-8 tracking-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.9] mb-6 md:mb-8 tracking-tight uppercase" style={{fontFamily: 'Impact, Arial Black, sans-serif'}}>
             <span className="block text-white">WILD DETAILS</span>
             <span className="block text-white">EMERGE ABOUT...</span>
           </h1>
@@ -75,7 +75,7 @@ export default function Home() {
       {/* Dear Dealership Owner Letter */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-zinc-950">
         <div className="max-w-3xl mx-auto">
-          <h3 className="font-display text-4xl md:text-5xl lg:text-6xl mb-8 md:mb-12 text-white">
+          <h3 className="uppercase text-4xl md:text-5xl lg:text-6xl mb-8 md:mb-12 text-white">
             DEAR DEALERSHIP OWNER,
           </h3>
 
@@ -123,7 +123,7 @@ export default function Home() {
       {/* The Problem Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="max-w-4xl mx-auto">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-7xl mb-8 md:mb-12 text-center">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-7xl mb-8 md:mb-12 text-center">
             THE VAMPIRE IN YOUR BUSINESS
           </h3>
 
@@ -155,7 +155,7 @@ export default function Home() {
             </div>
 
             <div className="bg-zinc-900 p-8 rounded-sm border border-zinc-800">
-              <h4 className="font-display text-2xl mb-6 text-red-500">OLD WAY vs NEW WAY</h4>
+              <h4 className="uppercase text-2xl mb-6 text-red-500">OLD WAY vs NEW WAY</h4>
               
               <div className="space-y-4">
                 <div className="opacity-50">
@@ -182,7 +182,7 @@ export default function Home() {
       {/* Agitation Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-gradient-to-b from-red-950/30 to-black">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-8xl mb-8 md:mb-12">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-8xl mb-8 md:mb-12">
             THEY'RE WINNING.<br />
             <span className="text-red-500">YOU'RE NOT.</span>
           </h3>
@@ -199,7 +199,7 @@ export default function Home() {
             </p>
 
             <div className="bg-black border-2 border-red-600 p-8 rounded-sm my-12">
-              <p className="font-display text-3xl md:text-4xl text-white mb-4">
+              <p className="uppercase text-3xl md:text-4xl text-white mb-4">
                 HERE'S WHAT HAPPENS NEXT:
               </p>
               <ul className="text-left space-y-4 text-lg">
@@ -240,7 +240,7 @@ export default function Home() {
       {/* Solution Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="max-w-4xl mx-auto">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-7xl mb-8 md:mb-12 text-center">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-7xl mb-8 md:mb-12 text-center">
             TIME TO HIRE A BODYGUARD
           </h3>
 
@@ -263,19 +263,19 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-6 my-12">
               <div className="bg-zinc-900 p-6 rounded-sm border border-zinc-800 text-center">
                 <div className="text-5xl mb-4">🔍</div>
-                <h4 className="font-display text-2xl text-white mb-2">AUDIT</h4>
+                <h4 className="uppercase text-2xl text-white mb-2">AUDIT</h4>
                 <p className="text-gray-400">We scan 200+ AI visibility factors</p>
               </div>
 
               <div className="bg-zinc-900 p-6 rounded-sm border border-zinc-800 text-center">
                 <div className="text-5xl mb-4">📊</div>
-                <h4 className="font-display text-2xl text-white mb-2">SCORE</h4>
+                <h4 className="uppercase text-2xl text-white mb-2">SCORE</h4>
                 <p className="text-gray-400">Get your AVI Score (0-100)</p>
               </div>
 
               <div className="bg-zinc-900 p-6 rounded-sm border border-zinc-800 text-center">
                 <div className="text-5xl mb-4">🚀</div>
-                <h4 className="font-display text-2xl text-white mb-2">DOMINATE</h4>
+                <h4 className="uppercase text-2xl text-white mb-2">DOMINATE</h4>
                 <p className="text-gray-400">Execute the playbook. Win.</p>
               </div>
             </div>
@@ -295,7 +295,7 @@ export default function Home() {
       {/* What You Get Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-zinc-950">
         <div className="max-w-5xl mx-auto">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-7xl mb-4 text-center">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-7xl mb-4 text-center">
             WHAT YOU GET
           </h3>
           <p className="text-center text-gray-400 text-lg mb-12 md:mb-16">
@@ -347,11 +347,11 @@ export default function Home() {
             ].map((item) => (
               <div key={item.num} className="bg-black border border-zinc-800 p-6 md:p-8 rounded-sm hover:border-red-600/50 transition-colors group">
                 <div className="flex items-start gap-4">
-                  <span className="font-display text-4xl md:text-5xl text-red-600 group-hover:text-red-500 transition-colors">
+                  <span className="uppercase text-4xl md:text-5xl text-red-600 group-hover:text-red-500 transition-colors">
                     {item.num}
                   </span>
                   <div>
-                    <h4 className="font-display text-xl md:text-2xl text-white mb-2">
+                    <h4 className="uppercase text-xl md:text-2xl text-white mb-2">
                       {item.title}
                     </h4>
                     <p className="text-gray-400">
@@ -368,7 +368,7 @@ export default function Home() {
       {/* Social Proof Section */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="max-w-4xl mx-auto">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-7xl mb-4 text-center">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-7xl mb-4 text-center">
             DON'T TAKE MY WORD FOR IT
           </h3>
           <p className="text-center text-gray-400 text-lg mb-12 md:mb-16">
@@ -475,7 +475,7 @@ export default function Home() {
       {/* CTA Form Section */}
       <section id="cta-form" className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-gradient-to-b from-black to-zinc-950">
         <div className="max-w-2xl mx-auto text-center">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-7xl mb-6">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-7xl mb-6">
             READY TO STOP GETTING YOUR ASS KICKED?
           </h3>
 
@@ -530,7 +530,7 @@ export default function Home() {
             <span className="text-4xl">🛡️</span>
           </div>
 
-          <h3 className="font-display text-4xl md:text-5xl lg:text-6xl mb-6">
+          <h3 className="uppercase text-4xl md:text-5xl lg:text-6xl mb-6">
             THE "NO BULLSHIT" GUARANTEE
           </h3>
 
@@ -561,13 +561,13 @@ export default function Home() {
       {/* Final Push */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-gradient-to-t from-red-950/50 to-black">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="font-display text-5xl md:text-6xl lg:text-8xl mb-8">
+          <h3 className="uppercase text-5xl md:text-6xl lg:text-8xl mb-8">
             THE CHOICE IS YOURS
           </h3>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <div className="bg-zinc-900 p-8 rounded-sm border border-zinc-800 opacity-50">
-              <h4 className="font-display text-2xl text-gray-500 mb-4">DO NOTHING</h4>
+              <h4 className="uppercase text-2xl text-gray-500 mb-4">DO NOTHING</h4>
               <ul className="text-left space-y-3 text-gray-500">
                 <li>→ Keep wondering where customers went</li>
                 <li>→ Watch competitors win</li>
@@ -577,7 +577,7 @@ export default function Home() {
             </div>
 
             <div className="bg-red-950/30 p-8 rounded-sm border-2 border-red-600">
-              <h4 className="font-display text-2xl text-white mb-4">GET YOUR AVI SCORE</h4>
+              <h4 className="uppercase text-2xl text-white mb-4">GET YOUR AVI SCORE</h4>
               <ul className="text-left space-y-3 text-white">
                 <li>→ Know exactly where you stand</li>
                 <li>→ See what your competitors are doing</li>
@@ -609,7 +609,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-center md:text-left">
-              <h4 className="font-display text-3xl text-white">VIZBIZ.AI</h4>
+              <h4 className="uppercase text-3xl text-white">VIZBIZ.AI</h4>
               <p className="text-gray-500 text-sm">AI Visibility for Dealerships That Want to Win</p>
             </div>
 
@@ -632,7 +632,7 @@ export default function Home() {
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <div className="bg-zinc-900 border-2 border-red-600 p-8 rounded-sm max-w-md w-full text-center">
             <div className="text-5xl mb-4">🚀</div>
-            <h4 className="font-display text-3xl text-white mb-4">YOU'RE IN!</h4>
+            <h4 className="uppercase text-3xl text-white mb-4">YOU'RE IN!</h4>
             <p className="text-gray-300 mb-6">
               Check your inbox. Your AVI Score audit is on its way. 
               <br /><br />
